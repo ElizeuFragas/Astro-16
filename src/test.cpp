@@ -1,10 +1,14 @@
 #include <GL/gl.h>
 #include <GL/glut.h>
+#include <iostream>
 #include <math.h>
 
 GLfloat angle = 0.0f;
-GLfloat x = 0.0f, y = 0.0f;
-GLfloat matrix[16];
+GLfloat xc = 0.0f, yc = 0.0f;
+GLfloat matrix[16] = {1.0f, 0.0f, 0.0f, 0.0f,
+                               0.0f, 1.0f, 0.0f, 0.0f,
+                               0.0f, 0.0f, 1.0f, 0.0f,
+                               0.0f, 0.0f, 0.0f, 1.0f,};
 
 void display(void) {
   glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
@@ -24,13 +28,16 @@ void display(void) {
   // Desenha o triângulo
   glPushMatrix();
     // Multiplica a matriz atual pela matriz da transformação anterior
-    glMultMatrixf(matrix);
+    // glMultMatrixf(matrix);
     // Rotaciona o triângulo em torno do seu centro
+    glLoadIdentity();
+    glTranslatef(xc, yc, 0.0f);
     glTranslatef(0.5f, 0.5f, 0.0f);
     glRotatef(angle, 0.0f, 0.0f, 1.0f);
     glTranslatef(-0.5f, -0.5f, 0.0f);
     // Translada o triângulo na direção x e y
-    glTranslatef(x, y, 0.0f);
+    std::cout << "x: "<< xc << " y: "<< yc << '\n';
+    glTranslatef(xc, yc, 0.0f);
     // Salva a matriz da transformação atual
     glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
     // Desenha o triângulo com cores diferentes
@@ -56,16 +63,16 @@ void keyboard(unsigned char key, int x, int y) {
       angle -= 10;
       break;
     case 'w':
-      y += .05;
+      yc += .05;
       break;
     case 's':
-      y -= .05;
+      yc -= .05f;
       break;
     case 'q':
-      x -= .05;
+      xc -= .05f;
       break;
     case 'e':
-      x += .05;
+      xc += .05f;
       break;
     default:
       break;

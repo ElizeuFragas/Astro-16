@@ -7,7 +7,10 @@
 
 GLint Drawing::degree = 0.0f;
 GLfloat Drawing::xC = 0.0f, Drawing::yC = 0.0f;
-GLfloat Drawing::matrix[16];
+GLfloat Drawing::matrix[16] = {1.0f, 0.0f, 0.0f, 0.0f,
+                               0.0f, 1.0f, 0.0f, 0.0f,
+                               0.0f, 0.0f, 1.0f, 0.0f,
+                               0.0f, 0.0f, 0.0f, 1.0f,};
 GLint Drawing::mode;
 
 
@@ -58,18 +61,17 @@ void Drawing::drawObject(){
 
 void Drawing::rotateObject(){
   
-  glLoadIdentity();
+  glMultMatrixf(matrix);
   glTranslatef(3.0f, 2.5f, 0.0f);
   glRotatef(degree, 0.0f, 0.0f, 1.0f);
   glTranslatef(-3.0f, -2.5f, 0.0f);
-  // glMultMatrixf(matrix);
   glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
 }
 
 void Drawing::translateObject(){
   
   std::cout << "x: " << xC << " y: " << yC <<'\n';
-  glMultMatrixf(matrix);
+  glLoadMatrixf(matrix);
   // glPushMatrix();
   // glLoadIdentity();
   // glRotatef(degree, 0.0f, 0.0f, 1.0f);

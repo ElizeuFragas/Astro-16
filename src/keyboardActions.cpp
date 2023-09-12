@@ -12,7 +12,7 @@ void EventHandler::keyBoardSpecialAction(int key, int x, int y) {
       std::cout << "UP_KEY\n";
       if (Drawing::degree > 360)
         Drawing::degree = 0;
-      Drawing::degree += 6;
+      Drawing::degree = 6;
       std::cout << Drawing::degree << '\n';
       break;
 
@@ -21,7 +21,7 @@ void EventHandler::keyBoardSpecialAction(int key, int x, int y) {
       if (Drawing::degree < -360) {
         Drawing::degree = 0;
       }
-      Drawing::degree -= 6;
+      Drawing::degree = -6;
       std::cout << Drawing::degree << '\n';
       break;
   }
