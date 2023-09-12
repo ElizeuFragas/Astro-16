@@ -1,0 +1,43 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-I./includes",
+      "-o",
+      "./lib/drawing.o",
+      "./src/drawing.cpp"
+    ],
+    "directory": "/home/enf/codes/Astro-16",
+    "file": "/home/enf/codes/Astro-16/src/drawing.cpp",
+    "output": "/home/enf/codes/Astro-16/lib/drawing.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-I./includes",
+      "-o",
+      "./lib/keyboardActions.o",
+      "./src/keyboardActions.cpp"
+    ],
+    "directory": "/home/enf/codes/Astro-16",
+    "file": "/home/enf/codes/Astro-16/src/keyboardActions.cpp",
+    "output": "/home/enf/codes/Astro-16/lib/keyboardActions.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "./lib/drawing.o",
+      "./lib/keyboardActions.o",
+      "-I./includes",
+      "-o",
+      "./build/Astro-16",
+      "./src/main.cpp"
+    ],
+    "directory": "/home/enf/codes/Astro-16",
+    "file": "/home/enf/codes/Astro-16/src/main.cpp",
+    "output": "/home/enf/codes/Astro-16/build/Astro-16"
+  }
+]
