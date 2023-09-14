@@ -3,6 +3,7 @@
 #include <iostream>
 #include "drawing.hpp"
 #include "keyboardActions.hpp"
+#include "spaceship.hpp"
 
 void setUpWindow(){
   glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
@@ -14,7 +15,7 @@ void setUpWindow(){
 void setUpScreen(){
   glClearColor(0.3f, 0.4f, 0.2f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
-  Drawing::drawObject();
+  Drawing::drawSpaceship(SpaceShip(0.0f, 0.0f, 0.0f));
   std::cout<<Drawing::mode<<'\n';
 }
 
