@@ -1,85 +1,56 @@
+#include "drawing.hpp"
+#include "spaceobjects.hpp"
 #include <GL/gl.h>
 #include <GL/glut.h>
-#include <algorithm>
 #include <cmath>
 #include <iostream>
-#include "drawing.hpp"
 
-GLint Drawing::degree = 0.0f;
-GLfloat Drawing::xC = 0.0f, Drawing::yC = 0.0f;
-GLfloat Drawing::matrix[16] = {1.0f, 0.0f, 0.0f, 0.0f,
-                               0.0f, 1.0f, 0.0f, 0.0f,
-                               0.0f, 0.0f, 1.0f, 0.0f,
-                               0.0f, 0.0f, 0.0f, 1.0f,};
-GLint Drawing::mode;
-
-
-void Drawing::drawObject(){
+void drawShip(Ship &ship) {
+  std::cout << "from drawShip: "<< ship.degree << '\n';
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  
-  glPushMatrix();
-  
-  glBegin(GL_LINES);
-  glColor3f(0.0f, 0.0f, 0.0f);
-  glVertex2f(-7.0f, 0.0f);
-  glVertex2f(7.0f, 0.0f);
-  glVertex2f(0.0f, -7.0f);
-  glVertex2f(0.0f, 7.0f);
-  glEnd();
-  
-  for(GLfloat var : matrix) {
-    std::cout<< var<<" ";    
-  } 
-  std::cout<<'\n';
 
-  // glScalef(0.25f, 0.25f, 1.0f);
-  
-  if (mode == 1) {
-    rotateObject();
-  }
-  else if (mode == 2) {
-    translateObject();
-  }
+  glTranslatef(ship.x, ship.y, 0.0f);
+  glRotatef(ship.degree, 0.0f, 0.0f, 1.0f);
   
   glBegin(GL_POLYGON);
-    glColor3f(1.0f, 1.0f, 1.0f);
-    glVertex2f(0.0f, 0.0f);
-    glVertex2f(3.0f, 5.0f);
-    glVertex2f(3.0f, 2.0f);
+  glColor3f(1.0f, 1.0f, 1.0f);
+  glVertex2f(0.0f, 1.25f);
+  glVertex2f(0.0f, -0.4f);
+  glVertex2f(-0.2f, -0.4f);
+  glVertex2f(-1.5f, -1.25f);
   glEnd();
-  
+
   glBegin(GL_POLYGON);
-    glColor3f(1.0f, 0.0f, 0.0f);
-    glVertex2f(6.0f, 0.0f);
-    glVertex2f(3.0f, 5.0f);
-    glVertex2f(3.0f, 2.0f);
+  glColor3f(1.0f, 0.0f, 0.0f);
+  glVertex2f(0.0f, 1.25f);
+  glVertex2f(0.0f, -0.4f);
+  glVertex2f(0.2f, -0.4f);
+  glVertex2f(1.5f, -1.25f);
   glEnd();
   glPopMatrix();
   glFlush();
 }
 
-void Drawing::rotateObject(){
-  
-  glMultMatrixf(matrix);
-  glTranslatef(3.0f, 2.5f, 0.0f);
-  glRotatef(degree, 0.0f, 0.0f, 1.0f);
-  glTranslatef(-3.0f, -2.5f, 0.0f);
-  glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
+void drawBullet(Bullet bullet) {
+    glColor3f(1.0, 1.0, 0.0);
+
+    drawCircle(bullet.x, bullet.y, 0.01);
 }
 
-void Drawing::translateObject(){
-  
-  std::cout << "x: " << xC << " y: " << yC <<'\n';
-  glLoadMatrixf(matrix);
-  // glPushMatrix();
-  // glLoadIdentity();
-  // glRotatef(degree, 0.0f, 0.0f, 1.0f);
-  glTranslatef(xC, yC, 0.0f);
-  glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
-  // glPopMatrix();
-}
+void drawAsteroid(Asteroid asteroid) {
+    glColor3f(0.5, 0.5, 0.5);
 
-GLfloat Drawing::getDegree(){
-  return degree;
+    // Desenhar o asteroide como um círculo de raio 0.05
+    drawCircle(asteroid.x, asteroid.y, 0.05);
+}
+void drawCircle(GLfloat x, GLfloat y, GLfloat radius) {
+    glBegin(GL_POLYGON);
+        for (int i = 0; i < 360; i++) {
+            float angle = i * M_PI / 180;
+            float x = x + radius * cos(angle);
+            float y = y + radius * sin(angle);
+            glVertex2f(x, y);
+        }
+    glEnd();
 }

@@ -3,18 +3,11 @@
 
 #include <GL/gl.h>
 #include <GL/glut.h>
+#include "spaceobjects.hpp"
 
-class Drawing {
-public:
-  static GLint degree, mode;
-  static GLfloat xC, yC, matrix[16];
- 
-  static void drawObject();
-  static GLfloat getDegree();
-  
-private:
-  static void rotateObject(); 
-  static void translateObject();
-};
+void drawShip(Ship &ship);
+void drawAsteroid(Asteroid asteroid);
+void drawBullet(Bullet bullet);
+void drawCircle(GLfloat x, GLfloat y, GLfloat radius);
 
 #endif // !DRAWING_HPP
