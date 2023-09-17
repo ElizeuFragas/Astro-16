@@ -1,7 +1,7 @@
 #ifndef SPACE_OBJECTS_HPP
 #define SPACE_OBJECTS_HPP
 
-#include <GL/gl.h>
+#include <GL/glut.h>
 
 class Ship {
 
@@ -23,7 +23,7 @@ class Bullet{
     GLfloat x, y;
     GLfloat degree;
     GLfloat xDir, yDir;
-    GLboolean status;
+    bool status;
     
     Bullet(){}
   //   Bullet(GLfloat x, GLfloat y, GLfloat degree, GLfloat xDir, GLfloat yDir){
@@ -39,7 +39,7 @@ class Asteroid{
   
   public:
     GLfloat x, y, degree, xDir, yDir;
-    GLboolean status;
+    bool status;
     
     Asteroid(){}
     Asteroid(GLfloat x, GLfloat y, GLfloat degree, GLfloat xDir, GLfloat yDir){
