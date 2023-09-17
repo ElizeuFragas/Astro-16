@@ -1,1 +1,6 @@
 test/
+.gitignore
+*.cache/
+build/
+lib/
+a
