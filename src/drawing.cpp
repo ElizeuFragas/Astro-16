@@ -5,52 +5,58 @@
 #include <cmath>
 #include <iostream>
 
-void drawShip(Ship &ship) {
-  std::cout << "from drawShip: "<< ship.degree << '\n';
+void drawShip(Ship& ship) {
+  
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-
+  
+  glPushMatrix();
   glTranslatef(ship.x, ship.y, 0.0f);
+  glScalef(0.5f, 0.5f, 1.0f);
+  glTranslatef(0.0f, -6.0f, 0.0f);
   glRotatef(ship.degree, 0.0f, 0.0f, 1.0f);
+  glTranslatef(0.0f, 6.0f, 0.0f);
+  
   
   glBegin(GL_POLYGON);
   glColor3f(1.0f, 1.0f, 1.0f);
-  glVertex2f(0.0f, 1.25f);
-  glVertex2f(0.0f, -0.4f);
-  glVertex2f(-0.2f, -0.4f);
-  glVertex2f(-1.5f, -1.25f);
+  glVertex2f(0.0f, -4.75f);
+  glVertex2f(0.0f, -6.5f);
+  glVertex2f(-0.2f, -6.5f);
+  glVertex2f(-1.5f, -7.25f);
   glEnd();
 
   glBegin(GL_POLYGON);
   glColor3f(1.0f, 0.0f, 0.0f);
-  glVertex2f(0.0f, 1.25f);
-  glVertex2f(0.0f, -0.4f);
-  glVertex2f(0.2f, -0.4f);
-  glVertex2f(1.5f, -1.25f);
+  glVertex2f(0.0f, -4.75f);
+  glVertex2f(0.0f, -6.5f);
+  glVertex2f(0.2f, -6.5f);
+  glVertex2f(1.5f, -7.25f);
   glEnd();
   glPopMatrix();
-  glFlush();
 }
 
-void drawBullet(Bullet bullet) {
-    glColor3f(1.0, 1.0, 0.0);
-
-    drawCircle(bullet.x, bullet.y, 0.01);
+void drawBullet(Bullet& bullet) {
+  glPushMatrix();
+    glColor3f(1.0f, 1.0f, 0.0f);
+    drawCircle(bullet.x, bullet.y, 0.2f);
+  glPopMatrix();
 }
 
-void drawAsteroid(Asteroid asteroid) {
-    glColor3f(0.5, 0.5, 0.5);
-
-    // Desenhar o asteroide como um círculo de raio 0.05
-    drawCircle(asteroid.x, asteroid.y, 0.05);
+void drawAsteroid(Asteroid& asteroid) {
+  glPushMatrix();
+    glColor3f(0.5f, 0.5f, 0.5f);
+    drawCircle(asteroid.x, asteroid.y, 0.05f);
+  glPopMatrix();
 }
-void drawCircle(GLfloat x, GLfloat y, GLfloat radius) {
-    glBegin(GL_POLYGON);
-        for (int i = 0; i < 360; i++) {
-            float angle = i * M_PI / 180;
-            float x = x + radius * cos(angle);
-            float y = y + radius * sin(angle);
-            glVertex2f(x, y);
-        }
-    glEnd();
+
+void drawCircle(GLfloat xc, GLfloat yc, GLfloat radius) {
+  glBegin(GL_POLYGON);
+  for (int i = 0; i < 360; i++) {
+    float angle = i * M_PI / 180.0f;
+    float x = xc + radius * cos(angle);
+    float y = yc + radius * sin(angle);
+    glVertex2f(x, y);
+  }
+  glEnd();
 }
