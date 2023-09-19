@@ -3,44 +3,40 @@
 #include "spaceobjects.hpp"
 #include "utils.hpp"
 #include "window.hpp"
+#include <GL/freeglut.h>
 #include <GL/freeglut_std.h>
-#include <GL/glut.h>
+#include <GL/gl.h>
 #include <iostream>
 #include <vector>
 
-const int TIMER = 15;
 const int MAX_BULLETS = 1;
-const double BULLET_SPEED = 0.3;
 const int MAX_ASTEROIDS = 10;
+const double BULLET_SPEED = 0.3;
 const double ASTEROID_SPEED = 0.06;
+const int UPDATE_TIMER = 15;
+const int ANIMATION_TIMER = 10;
 
 Ship ship;
 std::vector<Bullet> bullets(MAX_BULLETS);
 std::vector<Asteroid> asteroids(MAX_ASTEROIDS);
 int score = 0;
+bool onStart = true;
 bool animationStatus = false;
 bool inGameStatus = false;
-
-unsigned int animationTimer = 10;
-unsigned int count = 0;
-GLfloat scale = 18.0f;
-GLfloat move = 0.0f;
 
 void initialAnimationTimer(int value) {
 
   if (ship.size >= 0.5f) {
-    std::cout << "scale: " << ship.size << '\n';
     ship.size -= 0.05f;
 
     glutPostRedisplay();
     // Reagenda a função timer para ser chamada novamente após 100 milissegundos
-    glutTimerFunc(animationTimer, initialAnimationTimer, 0);
+    glutTimerFunc(ANIMATION_TIMER, initialAnimationTimer, 0);
   } else if (ship.y > -4.0f) {
-    std::cout << "move: " << ship.y << '\n';
     ship.y -= 0.05f;
     glutPostRedisplay();
     // Reagenda a função timer para ser chamada novamente após 100 milissegundos
-    glutTimerFunc(animationTimer, initialAnimationTimer, 0);
+    glutTimerFunc(ANIMATION_TIMER, initialAnimationTimer, 0);
 
   } else {
     animationStatus = false;
@@ -53,8 +49,8 @@ void display() {
   glClear(GL_COLOR_BUFFER_BIT);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  if (!animationStatus) {
-    // inialtAnimation(scale, move);
+
+  if (inGameStatus) {
     drawScore(score);
 
     for (Asteroid asteroid : asteroids) {
@@ -63,6 +59,7 @@ void display() {
         drawAsteroid(asteroid);
       }
     }
+    std::cout << ship.isAlive << '\n';
     if (ship.isAlive) {
 
       for (Bullet bullet : bullets) {
@@ -73,40 +70,51 @@ void display() {
       }
       drawShip(ship);
     } else {
-
       drawGameOver();
     }
   }
+  if (animationStatus) {
+
+    drawShip(ship);
+  }
+  if (onStart) {
+
+    drawShip(ship);
+  }
   glutPostRedisplay();
   glFlush();
+  // glutSwapBuffers();
 }
-void keyBoardSpecialAction(int key, int x, int y) {
-
-  std::cout << key << '\n';
-  rotateShip(key, ship);
-  // glutPostRedisplay();
-}
+void keyBoardSpecialAction(int key, int x, int y) { rotateShip(key, ship); }
 
 void keyBoardAction(unsigned char key, int x, int y) {
   translateShip(key, ship);
-  // glutPostRedisplay();
-  std::cout << key << '\n';
+  if (key == 'f' && !ship.isAlive) {
+    animationStatus = true;
+    inGameStatus = false;
+    initSpaceObjects(asteroids, bullets, ship);
+    glutPostRedisplay();
+    glutTimerFunc(ANIMATION_TIMER, initialAnimationTimer, 0);
+  }
+  if (key == 's' && !inGameStatus && !animationStatus) {
+    animationStatus = true;
+    initSpaceObjects(asteroids, bullets, ship);
+    glutPostRedisplay();
+    glutTimerFunc(ANIMATION_TIMER, initialAnimationTimer, 0);
+  }
 }
 
 void update(int value) {
 
-  updateBullets(bullets, ship, BULLET_SPEED);
-  updateAsteroids(asteroids, bullets, score, ASTEROID_SPEED);
+  if (inGameStatus) {
+    updateBullets(bullets, ship, BULLET_SPEED);
+  }
+  if (inGameStatus) {
+    updateAsteroids(asteroids, bullets, score, ASTEROID_SPEED);
+  }
   updateShipStatus(ship, asteroids);
   glutPostRedisplay();
-  glutTimerFunc(TIMER, update, 0);
-}
-
-void idle() {
-  if (inGameStatus) {
-    glutTimerFunc(TIMER, update, 0);
-    inGameStatus = false;
-  }
+  glutTimerFunc(UPDATE_TIMER, update, 0);
 }
 
 int main(int argc, char *argv[]) {
@@ -114,12 +122,11 @@ int main(int argc, char *argv[]) {
   glutInit(&argc, argv);
   initSpaceObjects(asteroids, bullets, ship);
   setUpWindow();
-  glutTimerFunc(animationTimer, initialAnimationTimer, 0);
   glutDisplayFunc(display);
+  glutTimerFunc(UPDATE_TIMER, update, 0);
   glutReshapeFunc(resizeView);
   glutSpecialFunc(keyBoardSpecialAction);
   glutKeyboardFunc(keyBoardAction);
-  glutIdleFunc(idle);
   glutMainLoop();
 
   return EXIT_SUCCESS;

@@ -37,7 +37,6 @@ void translateShip(unsigned char key, Ship &ship) {
   }
   switch (key) {
 
-    break;
   case 'w':
     ship.y += ship.yDir * step;
     ship.x += ship.xDir * step;
@@ -172,16 +171,15 @@ void updateShipStatus(Ship &ship, std::vector<Asteroid> &asteroids) {
 
   for (int i = 0; i < asteroids.size(); i++) {
 
-    if (asteroids[i].status) {
+    if (asteroids[i].status && ship.isAlive) {
 
       float dx = asteroids[i].x - ship.x;
       float dy = asteroids[i].y - ship.y;
       float d = sqrt(dx * dx + dy * dy);
 
-      if (d < 0.9) {
+      if (d < 1.1) {
         asteroids[i].status = 0;
         ship.isAlive = false;
-        std::cout << "ship is dead\n";
       }
     }
   }
