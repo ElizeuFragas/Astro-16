@@ -6,8 +6,9 @@
 class Ship {
 
 public:
-  GLfloat degree, x, y;
+  GLfloat degree, x, y, size;
   GLfloat xDir, yDir;
+  bool isAlive;
   Ship(){}
   Ship(GLfloat degree, GLfloat x, GLfloat y) {
 

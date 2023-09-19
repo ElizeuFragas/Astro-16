@@ -1,144 +1,120 @@
+#include "actions.hpp"
 #include "drawing.hpp"
-#include <GL/gl.h>
-#include <GL/glut.h>
-#include <array>
-#include <cmath>
-#include <iostream>
-#include <math.h>
-// #include "keyboardActions.hpp"
 #include "spaceobjects.hpp"
+#include "utils.hpp"
+#include "window.hpp"
+#include <GL/freeglut_std.h>
+#include <GL/glut.h>
+#include <iostream>
+#include <vector>
+
+const int TIMER = 15;
+const int MAX_BULLETS = 1;
+const double BULLET_SPEED = 0.3;
+const int MAX_ASTEROIDS = 10;
+const double ASTEROID_SPEED = 0.06;
 
 Ship ship;
-std::array<Bullet, 16> bullets;
-std::array<Asteroid, 16> asteroids;
+std::vector<Bullet> bullets(MAX_BULLETS);
+std::vector<Asteroid> asteroids(MAX_ASTEROIDS);
+int score = 0;
+bool animationStatus = false;
+bool inGameStatus = false;
 
-void setUpWindow() {
-  glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
-  glutInitWindowSize(720, 720);
-  glutInitWindowPosition(1260, 0);
-  glutCreateWindow("Astro-16");
+unsigned int animationTimer = 10;
+unsigned int count = 0;
+GLfloat scale = 18.0f;
+GLfloat move = 0.0f;
+
+void initialAnimationTimer(int value) {
+
+  if (ship.size >= 0.5f) {
+    std::cout << "scale: " << ship.size << '\n';
+    ship.size -= 0.05f;
+
+    glutPostRedisplay();
+    // Reagenda a função timer para ser chamada novamente após 100 milissegundos
+    glutTimerFunc(animationTimer, initialAnimationTimer, 0);
+  } else if (ship.y > -4.0f) {
+    std::cout << "move: " << ship.y << '\n';
+    ship.y -= 0.05f;
+    glutPostRedisplay();
+    // Reagenda a função timer para ser chamada novamente após 100 milissegundos
+    glutTimerFunc(animationTimer, initialAnimationTimer, 0);
+
+  } else {
+    animationStatus = false;
+    inGameStatus = true;
+  }
 }
-
 void display() {
 
-  glClearColor(0.3f, 0.4f, 0.2f, 1.0f);
+  glClearColor(0.10f, 0.10f, 0.10f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  if (!animationStatus) {
+    // inialtAnimation(scale, move);
+    drawScore(score);
 
+    for (Bullet bullet : bullets) {
+
+      if (bullet.status) {
+        drawBullet(bullet);
+      }
+    }
+    for (Asteroid asteroid : asteroids) {
+
+      if (asteroid.status) {
+        drawAsteroid(asteroid);
+      }
+    }
+  }
   drawShip(ship);
-
-  for (Bullet bullet : bullets) {
-
-    if (bullet.status) {
-      drawBullet(bullet);
-    }
-  }
-  for (Asteroid asteroid : asteroids) {
-
-    if (asteroid.status) {
-      drawAsteroid(asteroid);
-    }
-  }
-}
-void init() {
-
-  ship.degree = 0.0f;
-  ship.x = 0.0f;
-  ship.y = 0.0f;
-  ship.xDir = 0.0f;
-  ship.yDir = 1.0f;
-
-  Bullet bullet;
-  bullet.status = false;
-  Asteroid asteroid;
-  asteroid.status = false;
-
-  for (int i = 0; i < bullets.size(); ++i) {
-    bullets[i] = bullet;
-    asteroids[i] = asteroid;
-  }
-  std::cout << bullets.size() << '\n';
+  glutPostRedisplay();
+  glFlush();
 }
 void keyBoardSpecialAction(int key, int x, int y) {
 
-  GLfloat degreeInRad = (90.0f + ship.degree) * M_PI / 180.0f;
-  std::cout << ship.degree << '\n';
-  switch (key) {
-  case GLUT_KEY_LEFT:
-    std::cout << "LEFT_KEY\n";
-    ship.degree += 6;
-    std::cout << ship.degree << '\n';
-    break;
-
-  case GLUT_KEY_RIGHT:
-    std::cout << "RIGHT_KEY\n";
-    ship.degree -= 6;
-    std::cout << ship.degree << '\n';
-    break;
-  }
-  ship.xDir = cos(degreeInRad);
-  ship.yDir = sin(degreeInRad);
-  if (abs(ship.degree) >= 359) {
-    ship.degree = 0;
-  }
-  glutPostRedisplay();
+  std::cout << key << '\n';
+  rotateShip(key, ship);
+  // glutPostRedisplay();
 }
 
 void keyBoardAction(unsigned char key, int x, int y) {
-  GLfloat step = 0.1f, relativeStep;
-  GLfloat relativeDegree = abs(ship.degree);
-  if (relativeDegree > 90) {
-    relativeStep = -0.1f;
-  } else {
-    relativeStep = 0.1f;
-  }
-  switch (key) {
-  case 'w':
-    ship.y += ship.yDir * step;
-    ship.x += ship.xDir * step;
-    break;
-
-  case 's':
-    ship.y -= ship.yDir * step;
-    ship.x -= ship.xDir * step;
-    break;
-
-  case 'd':
-    ship.y += -ship.xDir * relativeStep;
-    ship.x += ship.yDir * relativeStep;
-    break;
-
-  case 'a':
-    ship.y += ship.xDir * relativeStep;
-    ship.x += -ship.yDir * relativeStep;
-    break;
-  }
-  std::cout << "x: " << ship.x << " y: " << ship.y << '\n';
-  glutPostRedisplay();
+  translateShip(key, ship);
+  // glutPostRedisplay();
+  std::cout << key << '\n';
 }
-void resizeView(GLsizei w, GLsizei h) {
-  if (h == 0)
-    h = 1;
 
-  glViewport(0, 0, w, h);
+void update(int value) {
 
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
+  updateBullets(bullets, ship, BULLET_SPEED);
+  updateAsteroids(asteroids, bullets, score, ASTEROID_SPEED);
+  updateShipStatus(ship, asteroids);
+  glutPostRedisplay();
+  glutTimerFunc(TIMER, update, 0);
+}
 
-  if (w <= h)
-    gluOrtho2D(-7.0f, 7.0f, -7.0f * h / w, 7.0f * h / w);
-  else
-    gluOrtho2D(-7.0f * w / h, 7.0f * w / h, 7.0f, 7.0f);
+void idle() {
+  if (inGameStatus) {
+    glutTimerFunc(TIMER, update, 0);
+    inGameStatus = false;
+  }
 }
 
 int main(int argc, char *argv[]) {
 
   glutInit(&argc, argv);
-  init();
+  initSpaceObjects(asteroids, bullets, ship);
   setUpWindow();
+  // glutFullScreen();
+  glutTimerFunc(animationTimer, initialAnimationTimer, 0);
   glutDisplayFunc(display);
   glutReshapeFunc(resizeView);
   glutSpecialFunc(keyBoardSpecialAction);
   glutKeyboardFunc(keyBoardAction);
+  glutIdleFunc(idle);
   glutMainLoop();
 
   return EXIT_SUCCESS;
