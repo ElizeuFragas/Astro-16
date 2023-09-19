@@ -73,17 +73,16 @@ void display() {
       drawGameOver();
     }
   }
-  if (animationStatus) {
+  else if (animationStatus) {
 
     drawShip(ship);
   }
-  if (onStart) {
-
+  else {
     drawShip(ship);
+    drawInitialMessage();
   }
   glutPostRedisplay();
-  glFlush();
-  // glutSwapBuffers();
+  glutSwapBuffers();
 }
 void keyBoardSpecialAction(int key, int x, int y) { rotateShip(key, ship); }
 

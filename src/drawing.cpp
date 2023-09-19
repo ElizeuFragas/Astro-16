@@ -1,6 +1,7 @@
 #include "drawing.hpp"
 #include "spaceobjects.hpp"
 #include <GL/freeglut.h>
+#include <GL/freeglut_std.h>
 #include <cmath>
 #include <iostream>
 #include <string.h>
@@ -80,7 +81,7 @@ void drawScore(int score) {
   glPopMatrix();
 }
 
-void drawGameOver(){
+void drawGameOver() {
   glPushMatrix();
   glLoadIdentity();
 
@@ -89,9 +90,9 @@ void drawGameOver(){
   glRasterPos2f(-1.05f, 0.0f);
 
   char gameOverMessage[] = "GAME OVER";
-  glutBitmapString(GLUT_BITMAP_HELVETICA_18, (const unsigned char*)gameOverMessage);
+  glutBitmapString(GLUT_BITMAP_HELVETICA_18,
+                   (const unsigned char *)gameOverMessage);
   glPopMatrix();
-  
 }
 void drawAxis() {
 
@@ -103,5 +104,18 @@ void drawAxis() {
   glVertex2f(7.0f, 0.0f);
   glVertex2f(-7.0f, 0.0f);
   glEnd();
+  glPopMatrix();
+}
+void drawInitialMessage() {
+  glPushMatrix();
+  glLoadIdentity();
+
+  glColor3f(0.5f, 0.5f, 0.5f);
+
+  glRasterPos2f(-1.05f, 0.0f);
+
+  char initialMessage[] = "PRESS S";
+  glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24,
+                   (const unsigned char *)initialMessage);
   glPopMatrix();
 }

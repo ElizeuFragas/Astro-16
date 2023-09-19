@@ -11,6 +11,7 @@ void drawBullet(Bullet& bullet);
 void drawScore(int score);
 void drawCircle(GLfloat x, GLfloat y, GLfloat radius);
 void drawGameOver();
+void drawInitialMessage();
 void drawAxis();
 
 #endif // !DRAWING_HPP
