@@ -69,6 +69,7 @@ void display() {
         drawAsteroid(asteroid);
       }
     }
+    drawGameOver();
   }
   drawShip(ship);
   glutPostRedisplay();

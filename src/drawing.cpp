@@ -88,16 +88,8 @@ void drawGameOver(){
 
   glRasterPos2f(-4.4f, 6.0f);
 
-  // const unsigned char *bufferChars =
-  //     reinterpret_cast<const unsigned char *>(charBuffer);
-  // glutBitmapString(GLUT_BITMAP_HELVETICA_18, bufferChars);
-  glPopMatrix();
-
-  glPushMatrix();
-  glColor3f(1.0, 1.0, 1.0);
-  glRasterPos2f(-6.0f, 6.0f);
-  glutBitmapString(GLUT_BITMAP_HELVETICA_18, (unsigned const char *)"SCORE:");
-  glPopMatrix();
+  char gameOverMessage[] = "GAME OVER";
+  glutBitmapString(GLUT_BITMAP_HELVETICA_18, (const unsigned char*)gameOverMessage);
   glPopMatrix();
   
 }
