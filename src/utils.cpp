@@ -1,6 +1,7 @@
 #include "spaceobjects.hpp"
 #include "utils.hpp"
 #include <vector>
+#include <cmath>
 
 void initSpaceObjects(std::vector<Asteroid> &asteroids, std::vector<Bullet> &bullets, Ship& ship){
 
@@ -24,4 +25,8 @@ void initSpaceObjects(std::vector<Asteroid> &asteroids, std::vector<Bullet> &bul
   for (int i = 0; i < asteroids.size(); ++i) {
     asteroids[i] = asteroid;
   }
+}
+
+float calculateDistance(const Asteroid& asteroid1, const Asteroid& asteroid2) {
+    return std::sqrt(std::pow(asteroid2.x - asteroid1.x, 2) + std::pow(asteroid2.y - asteroid1.y, 2));
 }

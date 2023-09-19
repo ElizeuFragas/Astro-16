@@ -1,5 +1,6 @@
 #include "drawing.hpp"
 #include "spaceobjects.hpp"
+#include "utils.hpp"
 #include <GL/glut.h>
 #include <cmath>
 #include <cstdlib>
@@ -163,6 +164,17 @@ void updateAsteroids(std::vector<Asteroid> &asteroids,
             score++;
           }
         }
+      }
+    }
+  }
+  for (size_t i = 0; i < asteroids.size(); ++i) {
+    for (size_t j = i + 1; j < asteroids.size(); ++j) {
+      float d = calculateDistance(asteroids[i], asteroids[j]);
+      if (d < 1.0) {
+        asteroids[i].xDir = -asteroids[i].xDir;
+        asteroids[i].yDir = -asteroids[i].yDir;
+        asteroids[j].xDir = -asteroids[j].xDir;
+        asteroids[j].yDir = -asteroids[j].yDir;
       }
     }
   }
