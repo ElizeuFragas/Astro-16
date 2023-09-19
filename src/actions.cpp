@@ -62,25 +62,27 @@ void translateShip(unsigned char key, Ship &ship) {
 void updateBullets(std::vector<Bullet> &bullets, Ship ship,
                    double bulletSpeed) {
 
-  for (int i = 0; i < bullets.size(); i++) {
+  if (ship.isAlive) {
+    for (int i = 0; i < bullets.size(); i++) {
 
-    if (!bullets[i].status) {
-      bullets[i].status = true;
-      bullets[i].x = ship.x;
-      bullets[i].y = ship.y;
-      bullets[i].xDir = ship.xDir;
-      bullets[i].yDir = ship.yDir;
-      break;
+      if (!bullets[i].status) {
+        bullets[i].status = true;
+        bullets[i].x = ship.x;
+        bullets[i].y = ship.y;
+        bullets[i].xDir = ship.xDir;
+        bullets[i].yDir = ship.yDir;
+        break;
+      }
     }
-  }
-  for (int i = 0; i < bullets.size(); i++) {
+    for (int i = 0; i < bullets.size(); i++) {
 
-    if (bullets[i].status) {
-      bullets[i].x += bullets[i].xDir * bulletSpeed;
-      bullets[i].y += bullets[i].yDir * bulletSpeed;
+      if (bullets[i].status) {
+        bullets[i].x += bullets[i].xDir * bulletSpeed;
+        bullets[i].y += bullets[i].yDir * bulletSpeed;
 
-      if (abs(bullets[i].x) > 7.0f || abs(bullets[i].y) > 7.0f) {
-        bullets[i].status = false;
+        if (abs(bullets[i].x) > 7.0f || abs(bullets[i].y) > 7.0f) {
+          bullets[i].status = false;
+        }
       }
     }
   }
@@ -166,19 +168,20 @@ void updateAsteroids(std::vector<Asteroid> &asteroids,
     }
   }
 }
-void updateShipStatus(Ship ship, std::vector<Asteroid> &asteroids) {
+void updateShipStatus(Ship &ship, std::vector<Asteroid> &asteroids) {
 
   for (int i = 0; i < asteroids.size(); i++) {
 
     if (asteroids[i].status) {
 
-      float dx = asteroids[i].x -ship.x;
+      float dx = asteroids[i].x - ship.x;
       float dy = asteroids[i].y - ship.y;
       float d = sqrt(dx * dx + dy * dy);
 
-      if (d < 0.5 + 0.2) {
+      if (d < 0.9) {
         asteroids[i].status = 0;
         ship.isAlive = false;
+        std::cout << "ship is dead\n";
       }
     }
   }

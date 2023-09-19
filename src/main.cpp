@@ -57,21 +57,26 @@ void display() {
     // inialtAnimation(scale, move);
     drawScore(score);
 
-    for (Bullet bullet : bullets) {
-
-      if (bullet.status) {
-        drawBullet(bullet);
-      }
-    }
     for (Asteroid asteroid : asteroids) {
 
       if (asteroid.status) {
         drawAsteroid(asteroid);
       }
     }
-    drawGameOver();
+    if (ship.isAlive) {
+
+      for (Bullet bullet : bullets) {
+
+        if (bullet.status) {
+          drawBullet(bullet);
+        }
+      }
+      drawShip(ship);
+    } else {
+
+      drawGameOver();
+    }
   }
-  drawShip(ship);
   glutPostRedisplay();
   glFlush();
 }
@@ -109,7 +114,6 @@ int main(int argc, char *argv[]) {
   glutInit(&argc, argv);
   initSpaceObjects(asteroids, bullets, ship);
   setUpWindow();
-  // glutFullScreen();
   glutTimerFunc(animationTimer, initialAnimationTimer, 0);
   glutDisplayFunc(display);
   glutReshapeFunc(resizeView);
