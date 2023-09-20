@@ -122,12 +122,12 @@ void drawInitialMessage() {
   glPushMatrix();
   glLoadIdentity();
 
-  glColor3f(0.5f, 0.5f, 0.5f);
+  glColor3f(0.3f, 0.3f, 0.3f);
 
-  glRasterPos2f(-1.05f, 0.0f);
+  glRasterPos2f(-1.49f, 0.0f);
 
-  char initialMessage[] = "PRESS S";
-  glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24,
+  char initialMessage[] = "PRESS S TO START";
+  glutBitmapString(GLUT_BITMAP_HELVETICA_18,
                    (const unsigned char *)initialMessage);
   glPopMatrix();
 }

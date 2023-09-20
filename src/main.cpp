@@ -12,7 +12,7 @@
 const int MAX_BULLETS = 1;
 const int MAX_ASTEROIDS = 7;
 const double BULLET_SPEED = 0.3;
-const double ASTEROID_SPEED = 0.06;
+const double ASTEROID_SPEED = 0.04;
 const int UPDATE_TIMER = 15;
 const int ANIMATION_TIMER = 10;
 
