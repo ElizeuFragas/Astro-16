@@ -92,6 +92,7 @@ void updateAsteroids(std::vector<Asteroid> &asteroids,
                      std::vector<Bullet> &bullets, int &score,
                      double asteroidSpeed) {
   int r = rand() % 10;
+  float noiseAteroidI = (rand() % 200 - 100) / 100.0f;
 
   if (r < 5) {
 
@@ -107,7 +108,7 @@ void updateAsteroids(std::vector<Asteroid> &asteroids,
           asteroids[i].y = 7.05;
           break;
         case 1:
-          asteroids[i].x = (rand() % 900 - 100) / 100.0;
+          asteroids[i].x = -(rand() % 900 - 100) / 100.0;
 
           asteroids[i].y = -7.05;
           break;
@@ -125,10 +126,10 @@ void updateAsteroids(std::vector<Asteroid> &asteroids,
           break;
         }
 
-        asteroids[i].xDir =
+        asteroids[i].xDir = noiseAteroidI
             -asteroids[i].x / sqrt(asteroids[i].x * asteroids[i].x +
                                    asteroids[i].y * asteroids[i].y);
-        asteroids[i].yDir =
+        asteroids[i].yDir = - noiseAteroidI
             -asteroids[i].y / sqrt(asteroids[i].x * asteroids[i].x +
                                    asteroids[i].y * asteroids[i].y);
 
@@ -142,8 +143,8 @@ void updateAsteroids(std::vector<Asteroid> &asteroids,
       asteroids[i].x += asteroids[i].xDir * asteroidSpeed;
       asteroids[i].y += asteroids[i].yDir * asteroidSpeed;
 
-      if (asteroids[i].x > 7.0 || asteroids[i].x < -7.0 ||
-          asteroids[i].y > 7.0 || asteroids[i].y < -7.0) {
+      if (asteroids[i].x > 9.0 || asteroids[i].x < -9.0 ||
+          asteroids[i].y > 9.0 || asteroids[i].y < -9.0) {
         asteroids[i].status = 0;
       }
     }
@@ -170,11 +171,13 @@ void updateAsteroids(std::vector<Asteroid> &asteroids,
   for (size_t i = 0; i < asteroids.size(); ++i) {
     for (size_t j = i + 1; j < asteroids.size(); ++j) {
       float d = calculateDistance(asteroids[i], asteroids[j]);
+      noiseAteroidI = (rand() % 200 - 100) / 100.0f;
+      float noiseAteroidJ = (rand() % 200 - 100) / 100.0f;
       if (d < 1.0) {
-        asteroids[i].xDir = -asteroids[i].xDir;
-        asteroids[i].yDir = -asteroids[i].yDir;
-        asteroids[j].xDir = -asteroids[j].xDir;
-        asteroids[j].yDir = -asteroids[j].yDir;
+        asteroids[i].xDir += noiseAteroidI;
+        asteroids[i].yDir -= noiseAteroidI;
+        asteroids[j].xDir += noiseAteroidJ;
+        asteroids[j].yDir -= noiseAteroidJ;
       }
     }
   }

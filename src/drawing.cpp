@@ -85,13 +85,25 @@ void drawGameOver() {
   glPushMatrix();
   glLoadIdentity();
 
-  glColor3f(1.0, 1.0, 1.0);
+  glColor3f(1.0, 1.0, 0.0);
 
   glRasterPos2f(-1.05f, 0.0f);
 
   char gameOverMessage[] = "GAME OVER";
   glutBitmapString(GLUT_BITMAP_HELVETICA_18,
                    (const unsigned char *)gameOverMessage);
+  glPopMatrix();
+
+  glPushMatrix();
+  glLoadIdentity();
+
+  glColor3f(1.0, 1.0, 1.0);
+
+  glRasterPos2f(-1.85f, -1.0f);
+
+  char restartMessage[] = "PRESS F TO RESTART";
+  glutBitmapString(GLUT_BITMAP_HELVETICA_18,
+                   (const unsigned char *)restartMessage);
   glPopMatrix();
 }
 void drawAxis() {

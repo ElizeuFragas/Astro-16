@@ -10,7 +10,7 @@
 #include <vector>
 
 const int MAX_BULLETS = 1;
-const int MAX_ASTEROIDS = 10;
+const int MAX_ASTEROIDS = 7;
 const double BULLET_SPEED = 0.3;
 const double ASTEROID_SPEED = 0.06;
 const int UPDATE_TIMER = 15;
@@ -59,7 +59,6 @@ void display() {
         drawAsteroid(asteroid);
       }
     }
-    std::cout << ship.isAlive << '\n';
     if (ship.isAlive) {
 
       for (Bullet bullet : bullets) {
